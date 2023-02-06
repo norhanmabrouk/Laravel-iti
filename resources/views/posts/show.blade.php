@@ -11,11 +11,13 @@
           <div class="card-body p-4">
             <h3 class="mb-3">Post Info</h3>
             <hr class="my-4">
-            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Title</strong> <span class="mx-2">|</span> ####</p>
-            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Posted by</strong> <span class="mx-2">|</span> ####</p>
-            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Created at</strong> <span class="mx-2">|</span> ####</p>
-            
-            </div>
+            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Title</strong> <span class="mx-2">|</span> {{ $post['title'] }} </p>
+            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Posted by</strong> <span class="mx-2">|</span> {{ $post['posted_by'] }} </p>
+            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Created at</strong> <span class="mx-2">|</span> {{ $post['created_at'] }} </p>
+            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Description</strong> <span class="mx-2">|</span> {{ $post['description'] }} </p>
+
+          {{-- @dd($post['created_at'])   --}}
+          </div>
           </div>
         </div>
 
@@ -24,13 +26,41 @@
           <div class="card-body p-4">
             <h3 class="mb-3">Post Creator Info</h3>
             <hr class="my-4">
-            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Name</strong> <span class="mx-2">|</span> ####</</p>
-            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>E-mail</strong> <span class="mx-2">|</span> ####</</p>
-            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Created at</strong> <span class="mx-2">|</span> ####</</p>
+            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Name</strong> <span class="mx-2">|</span>{{ $user['name'] }}</p>
+            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>E-mail</strong> <span class="mx-2">|</span> {{ $user['email'] }}</p>
             
             </div>
           </div>
         </div>
+
+        @if ($post->comments)
+          @foreach ($post->comments as $comment)
+            <div class="col-xl-10">
+              <div class="card mb-5" style="border-radius: 15px;">
+                <div class="card-body p-4">
+                  <h3 class="mb-3">Comment #{{ $comment->id }}</h3>
+                  <hr class="my-4">
+                  <p class="small mb-0"><i class="far fa-star fa-lg"></i>{{ $comment->body }}</p>
+                  <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>{{ $post->user->name }}, 
+                    {{ $comment->created_at->format('20y-m-d') }}</strong></p>
+                </div>
+              </div>
+            </div>
+           @endforeach
+        @endif
+
+                    {{--  Create a comment --}}
+         <div class="col-xl-10">
+          <form method="POST" action="{{ route('comments.store', $post->id) }}">
+            @csrf
+            
+            <textarea class="form-control" placeholder="Add your comment here" name="body" style="width: 70%; 
+            height:100px; border-color:black"></textarea>
+            
+            <button type="submit" class=" btn mt-2 text-light" style="width:70%; border-color:#85586F ;
+             background-color:black">Post Your Comment</button>
+          </form>
+         </div>
 
 
 

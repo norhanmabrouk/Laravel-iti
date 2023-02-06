@@ -3,52 +3,100 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
+use App\Models\User;
+use App\Http\Requests\PostRequest;
+use App\Http\Requests\UpdtaePostRequest;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $allPosts = [
-            [
-                'id' => 1,
-                'title' => 'laravel',
-                'description' => 'hello this is laravel post',
-                'posted_by' => 'Ahmed',
-                'created_at' => '2022-01-28 10:05:00',
-            ],
-            [
-                'id' => 2,
-                'title' => 'php',
-                'description' => 'hello this is php post',
-                'posted_by' => 'Mohamed',
-                'created_at' => '2022-01-30 10:05:00',
-            ],
-        ];
+        $allPosts = Post::paginate(10);
+        
     //    dd($allPosts);
         return view('posts.index',[
             'posts' => $allPosts,
+            
         ]);
     }
 
     public function create()
     {
-        return view('posts.create');
+        $users = User::get();
+ 
+        return view('posts.create',[
+            'users' => $users,
+        ]);
+        // return view('posts.create');
     }
 
-    public function store()
+    public function store(PostRequest $request)
     {
+        $input = $request-> all();
+        // dd($input);
+        // $id = $input['id'];
+        $title = $input['title'];
+        $posted_by = $input['posted_by'];
+        $description = $input['description'];
+        $userId = $input['posted_by'];
+
+        Post:: create([
+            'user_id' => $userId,
+            'title' => $title,
+            'posted_by' => $posted_by,
+            'description' => $description
+        ]);
+        
         return redirect()->route('posts.index');
     }
 
-    public function show()
+    public function show($postid)
     {
-        // dd($postId);
-        // $postId
-        return view('posts.show');
+        // dd($postid);
+        $post = Post:: find($postid);
+        $userid = $post['user_id'];
+        $user = User:: find($userid);
+        // dd($user);
+
+        return view('posts.show',[
+            'post' => $post,
+            'user' => $user
+        ]);
+        // return $post->title;
+    }
+    
+    public function edit($postid)
+    {
+        $post = Post:: find($postid);
+        // dd($post);
+        return view('posts.edit',[
+            'post' => $post,
+        ]);
     }
 
-    public function edit()
+    public function update($postid, UpdtaePostRequest $request)
     {
-        return view('posts.edit');
+        $post = Post :: find($postid);
+        $newdata= $request-> all();
+        $post->update([
+            'title'=> $newdata['title'],
+            'description'=> $newdata['description']
+        ]);
+        // dd($newdata);
+        // $request->validate([
+        //                'title' => ['required', 'min:3'],
+        //                'description' => ['required', 'min:5'],
+        //            ]);
+
+        return redirect()->route('posts.index');
+    }
+
+    public function destroy($postid)
+    {
+        $post= Post:: find($postid);
+        $post->delete();
+        return redirect()->route('posts.index');
+
     }
 }
