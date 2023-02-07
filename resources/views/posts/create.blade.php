@@ -4,7 +4,7 @@
 
 @section('content')
 
-<form method="post" action="/posts" class="container ">
+<form method="post" action="/posts" class="container " enctype="multipart/form-data">
 @csrf
   
   <div class="form-group">
@@ -24,6 +24,11 @@
 <div class="form-group">
   <label for="exampleInputEmail1">Description</label>
   <input name="description" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" >
+</div>
+
+<div class="form-group">
+  <label for="exampleInputEmail1">Post Image</label>
+  <input name="image" type="file" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" >
 </div>
 
   <button type="submit" class="btn btn-primary">Submit</button>

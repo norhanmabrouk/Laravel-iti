@@ -7,11 +7,13 @@ use App\Models\Post;
 use App\Models\User;
 use App\Http\Requests\PostRequest;
 use App\Http\Requests\UpdtaePostRequest;
+use App\Jobs\PruneOldPostsJob;
 
 class PostController extends Controller
 {
     public function index()
     {
+        PruneOldPostsJob::dispatch();
         $allPosts = Post::paginate(10);
         
     //    dd($allPosts);
@@ -33,6 +35,7 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
+        
         $input = $request-> all();
         // dd($input);
         // $id = $input['id'];
@@ -40,12 +43,14 @@ class PostController extends Controller
         $posted_by = $input['posted_by'];
         $description = $input['description'];
         $userId = $input['posted_by'];
+        $image = $input['image'];
 
         Post:: create([
             'user_id' => $userId,
             'title' => $title,
             'posted_by' => $posted_by,
-            'description' => $description
+            'description' => $description,
+            'image' => $image
         ]);
         
         return redirect()->route('posts.index');
