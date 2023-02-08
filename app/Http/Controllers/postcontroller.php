@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Http\Requests\PostRequest;
 use App\Http\Requests\UpdtaePostRequest;
 use App\Jobs\PruneOldPostsJob;
+use Illuminate\Support\Facades\Storage;
+ 
 
 class PostController extends Controller
 {
@@ -35,23 +37,28 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
-        
+        $path = $request->file('image')->storeAs(
+            'avatars', $request->user()->id
+        );
+        $path = $request->file('image')->store('avatars');
         $input = $request-> all();
+        $url = Storage::url('file.jpg');
         // dd($input);
         // $id = $input['id'];
         $title = $input['title'];
         $posted_by = $input['posted_by'];
         $description = $input['description'];
         $userId = $input['posted_by'];
-        $image = $input['image'];
+        // $image = $input['image'];
 
         Post:: create([
             'user_id' => $userId,
             'title' => $title,
             'posted_by' => $posted_by,
             'description' => $description,
-            'image' => $image
+            'image' => $path
         ]);
+        // dd($path);
         
         return redirect()->route('posts.index');
     }
@@ -101,6 +108,14 @@ class PostController extends Controller
     {
         $post= Post:: find($postid);
         $post->delete();
+        $path = $post['image'];
+        if(Storage::exists($path)){
+            Storage::delete($path);
+        }
+            
+        // }else{
+        //     dd('File does not exist.');
+        // }
         return redirect()->route('posts.index');
 
     }

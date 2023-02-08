@@ -15,6 +15,7 @@
             <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Posted by</strong> <span class="mx-2">|</span> {{ $post['posted_by'] }} </p>
             <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Created at</strong> <span class="mx-2">|</span> {{ $post['created_at'] }} </p>
             <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Description</strong> <span class="mx-2">|</span> {{ $post['description'] }} </p>
+            <p class="small mb-0"><i class="far fa-star fa-lg"></i><strong>Image Path</strong> <span class="mx-2">|</span> {{ $post['image'] }} </p>
 
           {{-- @dd($post['created_at'])   --}}
           </div>

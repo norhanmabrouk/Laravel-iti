@@ -13,6 +13,7 @@
       <th scope="col">Posted by</th>
       <th scope="col">Created at</th>
       <th scope="col">Slug</th>
+      <th scope="col">Image URL</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -27,6 +28,7 @@
       <td>{{ $post->user->name}}</td>
       <td>{{ $post['created_at'] }}</td>
       <td>{{ $post['slug'] }}</td>
+      <td>{{ $post['image'] }}</td>
       <td>
         <a href="{{route('posts.show', $post->id)}}" class="btn btn-info ">view</a>
         <a href="{{route('posts.edit', $post->id)}}" class="btn btn-warning ">edit</a>

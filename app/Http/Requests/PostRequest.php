@@ -26,6 +26,7 @@ class PostRequest extends FormRequest
         return [
             'title' => ['required', 'min:3', 'unique:posts,title'],
             'description' => ['required', 'min:10'],
+            'image' => 'mimes:jpg,png'
         ];
     }
 }
